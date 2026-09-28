@@ -1,57 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 
-namespace Gün8
+namespace Gun8
 {
     public class Product
     {
-        public Product(string name, decimal price, int stock)
-        {
-            Name = name;
-            Price = price;
-            Stock = stock;
-
-            Console.WriteLine("Product created: " + Name + ", Price: " + Price + ", Stock: " + Stock);
-        }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-        public int Stock { get; set; }
+        public string Name { get; }
+        public decimal Price { get; }
+        public Product(string name, decimal price) { Name = name; Price = price; }
     }
+
     public class Customer
     {
-        public Customer(string name, string surname, int age)
-        {
-            Name = name;
-            Surname = surname;
-            Age = age;
-            Console.WriteLine("Customer created: " + Name + " " + Surname + ", Age: " + Age);
-        }
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public int Age { get; set; }
+        public string Name { get; }
+        public Customer(string name) { Name = name; }
     }
+
     public class Order
     {
-        public Order(int orderNumber, int quantity)
+        public Product Product { get; }
+        public Customer Customer { get; }
+        public int Quantity { get; }
+        public decimal Total => Product.Price * Quantity;
+        public Order(Product product, Customer customer, int quantity)
         {
-            OrderNumber = orderNumber;
+            if (quantity <= 0) throw new ArgumentOutOfRangeException(nameof(quantity));
+            Product = product;
+            Customer = customer;
             Quantity = quantity;
-            Console.WriteLine("Order created: Order Number: " + OrderNumber + ", Quantity: " + Quantity);
         }
-        public int OrderNumber { get; set; }
-        public int Quantity { get; set; }
     }
+
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Product laptop = new Product("HP", 1500, 10);
-            Customer customer = new Customer("John", "Doe", 30);
-            Order order = new Order(1, 2);
-            Console.ReadLine();
+            var order = new Order(new Product("Defter", 40m), new Customer("Berkay"), 2);
+            Console.WriteLine($"{order.Customer.Name}: {order.Quantity} {order.Product.Name}, toplam {order.Total:C}");
         }
     }
 }
